@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Local AI Agent</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5
+        }
+
+        #chat {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            min-height: 450px;
+            padding: 20px
+        }
+
+        .m {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            white-space: pre-wrap
+        }
+
+        .u {
+            background: #e8f0fe;
+            margin-left: 15%
+        }
+
+        .a {
+            background: #eee;
+            margin-right: 15%
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px
+        }
+
+        button {
+            padding: 14px 22px;
+            border: 0;
+            border-radius: 8px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Local AI Agent</h1>
+    <p>Ollama + Llama 3.2 + FastAPI + tools + memory</p>
+    <div id="chat"></div>
+    <form><input id="msg" placeholder="Ask me something..."><button>Send</button></form>
+    <script>let sid = localStorage.getItem('sid'); const c = document.querySelector('#chat'), f = document.querySelector('form'), i = document.querySelector('#msg'); function add(cls, t) {let d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = t; c.appendChild(d); c.scrollTop = c.scrollHeight; return d} f.onsubmit = async e => {e.preventDefault(); let m = i.value.trim(); if (!m) return; add('u', m); i.value = ''; let a = add('a', 'Thinking...'); try {let r = await fetch('/api/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: m, session_id: sid})}); let d = await r.json(); if (!r.ok) throw Error(d.detail || 'Request failed'); sid = d.session_id; localStorage.setItem('sid', sid); a.textContent = d.response} catch (e) {a.textContent = 'Error: ' + e.message} }</script>
+</body>
+
+</html>
