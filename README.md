@@ -2,6 +2,8 @@
 
 A practical local AI agent using Python, FastAPI, Ollama/Llama 3.2, SQLite memory, and tool calling.
 
+![Local AI Agent screenshot](images/screenshotaichat.png)
+
 ## Run
 ```bash
 python3 -m venv venv
